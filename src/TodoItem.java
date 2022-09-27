@@ -1,7 +1,7 @@
 public class TodoItem {
-    public String TaskTitle;
-    public String TaskDescription;
-    public boolean TaskIsCompleted;
+    private String TaskTitle;
+    private String TaskDescription;
+    private boolean TaskIsCompleted;
 
     public TodoItem(String taskTitle, String taskDescription, boolean taskIsCompleted) {
         TaskTitle = taskTitle;
