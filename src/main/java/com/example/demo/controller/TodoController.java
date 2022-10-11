@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 class TodoController {
@@ -30,6 +29,8 @@ class TodoController {
     ResponseEntity<TodoItem> getTodoById(@PathVariable Long id){
         return new ResponseEntity<>(repository.findById(id).orElseThrow(()-> new RuntimeException("No item for provided id.")), HttpStatus.OK);
     }
+
+// Add a PutMapping to update an item by posting the updated object to its REST endpoint
 
     @PostMapping("/todo")
     ResponseEntity<?> addNewTodo(@RequestBody TodoItem item){
