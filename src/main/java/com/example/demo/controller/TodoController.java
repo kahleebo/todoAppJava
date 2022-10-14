@@ -21,19 +21,32 @@ class TodoController {
     ResponseEntity<List<TodoItem>> getTodoList(@RequestParam(value = "sortBy", required = false) String sortBy) {
         if(sortBy != null)
             return new ResponseEntity<>(repository.findAll(Sort.by(Sort.Direction.ASC, sortBy)), HttpStatus.OK);
-        else
-            return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
+        
+        return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/todo/{id}")
+    ResponseEntity<?> deleteTodoById(@PathVariable Long id) {
+        if(!repository.existsById(id))
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+        repository.deleteById(id);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @GetMapping("/todo/{id}")
-    ResponseEntity<TodoItem> getTodoById(@PathVariable Long id){
+    ResponseEntity<TodoItem> getTodoById(@PathVariable Long id) {
         return new ResponseEntity<>(repository.findById(id).orElseThrow(()-> new RuntimeException("No item for provided id.")), HttpStatus.OK);
     }
 
-// Add a PutMapping to update an item by posting the updated object to its REST endpoint
+    @PutMapping("/todo/{id}")
+    ResponseEntity<?> updateTodoById(@PathVariable Long id, @RequestBody TodoItem item) {
+        item.setId(id);
+        return new ResponseEntity<>(repository.save(item), HttpStatus.OK);        
+    }
 
     @PostMapping("/todo")
-    ResponseEntity<?> addNewTodo(@RequestBody TodoItem item){
+    ResponseEntity<?> addNewTodo(@RequestBody TodoItem item) {
         return new ResponseEntity<>(repository.save(item), HttpStatus.CREATED);
     }
 }

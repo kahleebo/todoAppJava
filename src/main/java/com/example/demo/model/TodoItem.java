@@ -16,4 +16,9 @@ public class TodoItem {
     private String description;
     private Boolean completed;
     private Integer priority;
+
+    @Override
+    public String toString() {
+        return id + ", " + title + ", " + description + ", " + completed + ", " + priority;
+    }
 }
