@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 class TodoController {
@@ -31,9 +32,34 @@ class TodoController {
     }
 
 // Add a PutMapping to update an item by posting the updated object to its REST endpoint
+    @PutMapping("/todo/{id}")
+    public ResponseEntity<TodoItem> updateItem(@PathVariable long id, @RequestBody TodoItem todo) {
+        TodoItem updateItem = repository.findById(id)
+                .orElseThrow(() -> new IllegalStateException("item not exist with id: " + id));
+
+        updateItem.setPriority(todo.getPriority());
+     updateItem.setTitle(todo.getTitle());
+        updateItem.setDescription(todo.getDescription());
+        updateItem.setCompleted(todo.getCompleted());
+
+        return new ResponseEntity<>(repository.save(updateItem), HttpStatus.OK);
+    }
 
     @PostMapping("/todo")
     ResponseEntity<?> addNewTodo(@RequestBody TodoItem item){
         return new ResponseEntity<>(repository.save(item), HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/todo/{id}")
+    public ResponseEntity<TodoItem> deleteToDo(@PathVariable long id, @RequestBody TodoItem todo) {
+        TodoItem removeItem = repository.findById(id)
+        .orElseThrow(() -> new IllegalStateException("item not exist with id: " + id));
+
+        repository.deleteById(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+
+
+    }
 }
+
