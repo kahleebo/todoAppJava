@@ -53,7 +53,7 @@ class TodoController {
     }
     //Delete a ToDoItem by id
     @DeleteMapping("/todo/{id}")
-    ResponseEntity<TodoItem> DeleteToDoItemById(@PathVariable long id) {
+    ResponseEntity<TodoItem> deleteToDoItemById(@PathVariable long id) {
         //get the ToDoItem from the repo
         TodoItem updateItem = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Item does not exist with id: " + id));
